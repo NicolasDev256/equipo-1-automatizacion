@@ -60,9 +60,9 @@ Todas fallan siempre igual: las del carrito y descuentos se corrieron 5 veces (3
 ## 4. Medidas
 
 - Criterios de aceptación del backlog: **61** (20 historias, plan en Jira TDJ-21 a TDJ-41) · automatizados: **30** (**49 %**). Son 37 pruebas propias + 3 heredadas + 5 que traía la plantilla = 45.
-- Tiempo que nos tomó escribir las pruebas automatizadas: **≈ 30 min** (de la instalación a las 23:29 al último commit de pruebas a las 23:58) · tiempo de ejecutar toda la suite: **≈ 43 s** (45 pruebas, en local) y ≈ 1 min en GitHub Actions
+- Tiempo que nos tomó escribir las pruebas automatizadas: **≈ 70 min** (todo el laboratorio: de crear el repo a las 23:15 a la entrega pasadas las 00:20, incluyendo diagnóstico, Jira y CI) · tiempo de ejecutar toda la suite: **≈ 43 s** (45 pruebas, en local) y ≈ 1 min en GitHub Actions
 - Tiempo estimado de ejecutar **a mano** esos mismos casos: **≈ 60 min** (≈ 2 min por criterio × 30; los 12 correos solos ya son ≈ 15 min)
-- Con esos números, ¿en cuántas ejecuciones se paga la automatización? (inversión ÷ ahorro por ejecución): **30 ÷ 59 ≈ 0,5 → se paga desde la primera ejecución**
+- Con esos números, ¿en cuántas ejecuciones se paga la automatización? (inversión ÷ ahorro por ejecución): **70 ÷ 59 ≈ 1,2 → se paga en la segunda ejecución**
 
 ## 5. Reflexión (máximo 5 líneas cada una)
 
