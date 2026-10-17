@@ -1,6 +1,6 @@
 # Entrega · Laboratorio 3.1 · Introducción a la automatización de pruebas
 
-**Equipo:** `equipo-1` · **Integrantes:** _nombres_ · **Repositorio:** https://github.com/NicolasDev256/Equipo-automatizacion
+**Equipo:** `equipo-1` · **Integrantes:** _nombres_ · **Repositorio:** https://github.com/NicolasDev256/equipo-1-automatizacion
 
 > Respondan aquí, en este archivo, y háganle commit. Sean breves y concretos: una frase buena vale más que un párrafo.
 
