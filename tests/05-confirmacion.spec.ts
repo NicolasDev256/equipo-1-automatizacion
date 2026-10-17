@@ -12,7 +12,7 @@ import { TiendaPage } from '../pages/TiendaPage';
 
 test.describe('US-16 · Que mis datos no queden a la vista de otra persona', () => {
   test('CA1: tras confirmar y empezar otra compra, el formulario aparece vacío', async ({ page }) => {
-    test.fail(true, 'PENDIENTE-JIRA · el formulario conserva los datos de la compra anterior');
+    test.fail(true, 'TDJ-54 · el formulario conserva los datos de la compra anterior');
     const tienda = new TiendaPage(page);
 
     // ARRANGE: una compra terminada
@@ -62,7 +62,7 @@ test.describe('US-17 · Confirmar mi pedido', () => {
   });
 
   test('CA3: un pedido hecho después de recargar la página no repite un número anterior', async ({ page }) => {
-    test.fail(true, 'PENDIENTE-JIRA · al recargar, el número de pedido vuelve a empezar (#1001 repetido)');
+    test.fail(true, 'TDJ-55 · al recargar, el número de pedido vuelve a empezar (#1001 repetido)');
     const tienda = new TiendaPage(page);
 
     // ARRANGE: primera compra

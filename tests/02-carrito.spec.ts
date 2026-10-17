@@ -61,7 +61,7 @@ test.describe('US-04 · Agregar productos sin superar el stock', () => {
   });
 
   test('CA3: 4 + 4 mochilas supera el stock (6) y debe rechazarse', async ({ page }) => {
-    test.fail(true, 'PENDIENTE-JIRA · agregar en dos veces deja pasar del stock (4 + 4 = 8 con stock 6)');
+    test.fail(true, 'TDJ-44 · agregar en dos veces deja pasar del stock (4 + 4 = 8 con stock 6)');
     // ARRANGE
     await page.goto('/');
     const tarjeta = page
@@ -90,7 +90,7 @@ test.describe('US-04 · Agregar productos sin superar el stock', () => {
 
 test.describe('US-05 · Aumentar la cantidad desde el carrito', () => {
   test('CA2: "+" no pasa del stock (6 mochilas)', async ({ page }) => {
-    test.fail(true, 'PENDIENTE-JIRA · el botón "+" deja pasar del stock (6 → 7)');
+    test.fail(true, 'TDJ-45 · el botón "+" deja pasar del stock (6 → 7)');
     // ARRANGE: las 6 mochilas del stock
     await page.goto('/');
     const tarjeta = page
@@ -118,7 +118,7 @@ test.describe('US-05 · Aumentar la cantidad desde el carrito', () => {
 test.describe('US-06 · Disminuir la cantidad desde el carrito', () => {
   // migrada al Page Object (Parte 5)
   test('CA2: con cantidad 1, "−" no la deja en 0 ni en negativo (elegimos: se queda en 1)', async ({ page }) => {
-    test.fail(true, 'PENDIENTE-JIRA · el botón "−" deja la cantidad en 0');
+    test.fail(true, 'TDJ-45 · el botón "−" deja la cantidad en 0');
     const tienda = new TiendaPage(page);
 
     // ARRANGE: 1 mochila

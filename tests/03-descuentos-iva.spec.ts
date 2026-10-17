@@ -25,8 +25,8 @@ test.describe('US-09 · Aplicar un código de descuento', () => {
 
   // una prueba por cada variante del codigo
   const VARIANTES = [
-    { codigo: 'desc10', bug: 'PENDIENTE-JIRA · el código distingue mayúsculas y minúsculas' },
-    { codigo: 'Desc10', bug: 'PENDIENTE-JIRA · el código distingue mayúsculas y minúsculas' },
+    { codigo: 'desc10', bug: 'TDJ-47 · el código distingue mayúsculas y minúsculas' },
+    { codigo: 'Desc10', bug: 'TDJ-47 · el código distingue mayúsculas y minúsculas' },
     { codigo: ' DESC10 ', bug: '' },
   ];
 
@@ -67,7 +67,7 @@ test.describe('US-10 · Recibir aviso si el código no es válido', () => {
 
   // migrada al Page Object (Parte 5)
   test('CA2: un código inválido NO borra un descuento válido ya aplicado', async ({ page }) => {
-    test.fail(true, 'PENDIENTE-JIRA · un código inválido borra el descuento ya aplicado');
+    test.fail(true, 'TDJ-49 · un código inválido borra el descuento ya aplicado');
     const tienda = new TiendaPage(page);
 
     // ARRANGE: 1 mochila con DESC10 ya aplicado
@@ -87,7 +87,7 @@ test.describe('US-10 · Recibir aviso si el código no es válido', () => {
 
 test.describe('US-11 · Ver el IVA correcto', () => {
   test('CA2: con descuento, el IVA se calcula sobre el valor descontado', async ({ page }) => {
-    test.fail(true, 'PENDIENTE-JIRA · el IVA se calcula sobre el subtotal sin descontar');
+    test.fail(true, 'TDJ-50 · el IVA se calcula sobre el subtotal sin descontar');
     // el valor esperado sale del requisito, no de lo que muestra la tienda
     const descuento = 65000 * 0.1;
     const ivaEsperado = (65000 - descuento) * 0.19;
@@ -116,7 +116,7 @@ test.describe('US-11 · Ver el IVA correcto', () => {
 
 test.describe('US-12 · Ver el total a pagar correcto', () => {
   test('CA2: con descuento, el total es subtotal − descuento + IVA (IVA sobre lo descontado)', async ({ page }) => {
-    test.fail(true, 'PENDIENTE-JIRA · el total usa el IVA sin descontar (misma causa que US-11 CA2)');
+    test.fail(true, 'TDJ-50 · el total usa el IVA sin descontar (misma causa que US-11 CA2)');
     // mismo oraculo que en US-11
     const subtotal = 65000;
     const descuento = subtotal * 0.1;

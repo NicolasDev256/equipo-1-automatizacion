@@ -26,7 +26,7 @@ const CORREOS_MAL_FORMADOS = ['ana.gmail.com', 'ana@', '@gmail.com', 'ana gomez@
 
 test.describe('US-13 · Ir a pagar desde el carrito', () => {
   test('CA3: con total cero o negativo no se puede ir a pagar', async ({ page }) => {
-    test.fail(true, 'PENDIENTE-JIRA · con total $ 0 el botón "Ir a pagar" sigue habilitado');
+    test.fail(true, 'TDJ-51 · con total $ 0 el botón "Ir a pagar" sigue habilitado');
     const tienda = new TiendaPage(page);
 
     // ARRANGE: 1 mochila
@@ -83,7 +83,7 @@ test.describe('US-15 · Ingresar un correo electrónico válido', () => {
   // una prueba por cada correo valido
   for (const correo of CORREOS_VALIDOS) {
     test(`CA1-CA3: el correo ${correo} se acepta`, async ({ page }) => {
-      test.fail(CORREOS_CON_BUG.includes(correo), 'PENDIENTE-JIRA · la tienda rechaza correos válidos con . - + o dominio de varios niveles');
+      test.fail(CORREOS_CON_BUG.includes(correo), 'TDJ-53 · la tienda rechaza correos válidos con . - + o dominio de varios niveles');
       const tienda = new TiendaPage(page);
 
       // ARRANGE

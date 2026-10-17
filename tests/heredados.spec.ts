@@ -22,7 +22,7 @@ test('H1 · el catálogo tiene 8 productos', async ({ page }) => {
 
 test('H2 · el IVA de 2 mochilas con DESC20 es $ 19.760', async ({ page }) => {
   // el valor esperado esta bien: (130.000 - 26.000) * 0.19 = 19.760. La tienda da 24.700 (IVA sin descontar)
-  test.fail(true, 'PENDIENTE-JIRA · el IVA se calcula sobre el subtotal sin descontar (mismo bug de US-11 CA2)');
+  test.fail(true, 'TDJ-50 · el IVA se calcula sobre el subtotal sin descontar (mismo bug de US-11 CA2)');
   await page.goto('/');
   const tarjeta = page
     .locator('.rounded-lg')
