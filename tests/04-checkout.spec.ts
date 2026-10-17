@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { TiendaPage } from '../pages/TiendaPage';
 
 /**
  * BLOQUE CHECKOUT · US-13 a US-15.
@@ -19,45 +20,103 @@ const CORREOS_VALIDOS = [
   'ana+tienda@gmail.com',
   'ana@universidad.edu.co',
 ];
+// estos correos son validos pero hoy la tienda los rechaza (mismo bug: la validacion es muy estricta)
+const CORREOS_CON_BUG = ['ana.gomez@gmail.com', 'ana-gomez@gmail.com', 'ana+tienda@gmail.com', 'ana@universidad.edu.co'];
 const CORREOS_MAL_FORMADOS = ['ana.gmail.com', 'ana@', '@gmail.com', 'ana gomez@gmail.com', 'ana@@gmail.com', 'ana@gmail'];
 
 test.describe('US-13 · Ir a pagar desde el carrito', () => {
   test('CA3: con total cero o negativo no se puede ir a pagar', async ({ page }) => {
-    test.fixme(true, 'Pendiente de automatizar');
-    // Nivel 2 · CAZABUGS.
-    // Agreguen 1 mochila y presionen "−" para llevar la cantidad a 0. El botón "Ir a pagar" debe estar deshabilitado
-    // (toBeDisabled()). Ojo: esta prueba fallará por el mismo defecto de US-06 CA2, pero es OTRO criterio y OTRO bug:
-    // aunque se corrija el "−", la tienda seguiría sin validar el total antes de cobrar.
+    test.fail(true, 'PENDIENTE-JIRA · con total $ 0 el botón "Ir a pagar" sigue habilitado');
+    const tienda = new TiendaPage(page);
+
+    // ARRANGE: 1 mochila
+    await tienda.abrir();
+    await tienda.agregar('Mochila escolar');
+    await expect(tienda.cantidad('Mochila escolar')).toHaveText('1');
+
+    // ACT: bajar la cantidad a 0 con "−"
+    await tienda.carrito.getByRole('button', { name: 'Disminuir cantidad de Mochila escolar' }).click();
+
+    // ASSERT
+    await expect(tienda.carrito.getByRole('button', { name: 'Ir a pagar' })).toBeDisabled();
   });
 });
 
 test.describe('US-14 · Completar mis datos de envío', () => {
   test('CA1: con el formulario vacío hay un error por cada campo obligatorio', async ({ page }) => {
-    test.fixme(true, 'Pendiente de automatizar');
-    // Nivel 1.
-    // Agreguen un producto, "Ir a pagar", presionen "Confirmar pedido" sin llenar nada y comprueben los tres mensajes:
-    // "El nombre es obligatorio." · "El correo es obligatorio." · "La dirección es obligatoria."
+    const tienda = new TiendaPage(page);
+
+    // ARRANGE
+    await tienda.abrir();
+    await tienda.agregar('Esfero azul');
+    await tienda.irAPagar();
+
+    // ACT: confirmar sin llenar nada
+    await tienda.confirmar();
+
+    // ASSERT
+    await expect(page.getByText('El nombre es obligatorio.')).toBeVisible();
+    await expect(page.getByText('El correo es obligatorio.')).toBeVisible();
+    await expect(page.getByText('La dirección es obligatoria.')).toBeVisible();
   });
 
   test('CA2: un nombre y una dirección de solo espacios se rechazan como vacíos', async ({ page }) => {
-    test.fixme(true, 'Pendiente de automatizar');
-    // Nivel 2. Llenen nombre y dirección con "   " (tres espacios) y un correo válido.
+    const tienda = new TiendaPage(page);
+
+    // ARRANGE
+    await tienda.abrir();
+    await tienda.agregar('Esfero azul');
+    await tienda.irAPagar();
+
+    // ACT
+    await tienda.llenarDatos({ nombre: '   ', correo: 'ana@correo.com', direccion: '   ' });
+    await tienda.confirmar();
+
+    // ASSERT
+    await expect(page.getByText('El nombre es obligatorio.')).toBeVisible();
+    await expect(page.getByText('La dirección es obligatoria.')).toBeVisible();
+    await expect(page.getByRole('heading', { name: '¡Pedido confirmado!' })).not.toBeVisible();
   });
 });
 
 test.describe('US-15 · Ingresar un correo electrónico válido', () => {
-  test('CA1-CA3: cada correo válido se acepta', async ({ page }) => {
-    test.fixme(true, 'Pendiente de automatizar');
-    // Nivel 3 · CAZABUGS · PRUEBAS DIRIGIDAS POR DATOS.
-    // Generen UNA prueba por cada correo de CORREOS_VALIDOS. Para cada una: agregar un producto, ir a pagar, llenar
-    // nombre y dirección válidos + ese correo, confirmar y comprobar que aparece "¡Pedido confirmado!".
-    // Cuando terminen, miren el reporte: ¿cuántas filas fallan? ¿Qué tienen en común?
-    // Reto: marquen como fallo conocido SOLO las filas que fallan, no todas (pista: test.fail(condicion, 'razón')).
-  });
+  // una prueba por cada correo valido
+  for (const correo of CORREOS_VALIDOS) {
+    test(`CA1-CA3: el correo ${correo} se acepta`, async ({ page }) => {
+      test.fail(CORREOS_CON_BUG.includes(correo), 'PENDIENTE-JIRA · la tienda rechaza correos válidos con . - + o dominio de varios niveles');
+      const tienda = new TiendaPage(page);
 
-  test('CA4: cada correo mal formado se rechaza con un mensaje claro', async ({ page }) => {
-    test.fixme(true, 'Pendiente de automatizar');
-    // Nivel 2. Igual que la anterior, con CORREOS_MAL_FORMADOS. Debe verse "El correo no tiene un formato válido."
-    // y NO debe aparecer "¡Pedido confirmado!".
-  });
+      // ARRANGE
+      await tienda.abrir();
+      await tienda.agregar('Esfero azul');
+      await tienda.irAPagar();
+
+      // ACT
+      await tienda.llenarDatos({ nombre: 'Ana Gómez', correo, direccion: 'Calle 10 # 20-30' });
+      await tienda.confirmar();
+
+      // ASSERT
+      await expect(page.getByRole('heading', { name: '¡Pedido confirmado!' })).toBeVisible();
+    });
+  }
+
+  // y una por cada correo mal formado
+  for (const correo of CORREOS_MAL_FORMADOS) {
+    test(`CA4: el correo "${correo}" se rechaza con un mensaje claro`, async ({ page }) => {
+      const tienda = new TiendaPage(page);
+
+      // ARRANGE
+      await tienda.abrir();
+      await tienda.agregar('Esfero azul');
+      await tienda.irAPagar();
+
+      // ACT
+      await tienda.llenarDatos({ nombre: 'Ana Gómez', correo, direccion: 'Calle 10 # 20-30' });
+      await tienda.confirmar();
+
+      // ASSERT
+      await expect(page.getByText('El correo no tiene un formato válido.')).toBeVisible();
+      await expect(page.getByRole('heading', { name: '¡Pedido confirmado!' })).not.toBeVisible();
+    });
+  }
 });

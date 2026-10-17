@@ -12,10 +12,22 @@ import { TiendaPage } from '../pages/TiendaPage';
 
 test.describe('US-16 · Que mis datos no queden a la vista de otra persona', () => {
   test('CA1: tras confirmar y empezar otra compra, el formulario aparece vacío', async ({ page }) => {
-    test.fixme(true, 'Pendiente de automatizar');
-    // Nivel 3 · CAZABUGS.
-    // Compren algo, presionen "Volver a la tienda", agreguen otro producto, "Ir a pagar" y comprueben que los tres
-    // campos están vacíos:  await expect(campo).toHaveValue('')
+    test.fail(true, 'PENDIENTE-JIRA · el formulario conserva los datos de la compra anterior');
+    const tienda = new TiendaPage(page);
+
+    // ARRANGE: una compra terminada
+    await tienda.abrir();
+    await tienda.comprar('Esfero azul');
+
+    // ACT: empezar otra compra
+    await page.getByRole('button', { name: 'Volver a la tienda' }).click();
+    await tienda.agregar('Cuaderno universitario');
+    await tienda.irAPagar();
+
+    // ASSERT: no deben quedar los datos de la compra anterior
+    await expect(tienda.campo('Nombre completo')).toHaveValue('');
+    await expect(tienda.campo('Correo electrónico')).toHaveValue('');
+    await expect(tienda.campo('Dirección de entrega')).toHaveValue('');
   });
 });
 
@@ -33,16 +45,38 @@ test.describe('US-17 · Confirmar mi pedido', () => {
   });
 
   test('CA2: un segundo pedido (sin recargar) tiene otro número', async ({ page }) => {
-    test.fixme(true, 'Pendiente de automatizar');
-    // Nivel 2. Hagan dos compras seguidas ("Volver a la tienda" entre ambas), lean el número de cada una
-    // (guárdenlo en una variable con innerText()) y comprueben que son distintos: expect(segundo).not.toBe(primero)
+    const tienda = new TiendaPage(page);
+
+    // ARRANGE: primera compra
+    await tienda.abrir();
+    await tienda.comprar('Esfero azul');
+    const primero = await tienda.numeroDePedido();
+
+    // ACT: segunda compra
+    await page.getByRole('button', { name: 'Volver a la tienda' }).click();
+    await tienda.comprar('Esfero azul');
+    const segundo = await tienda.numeroDePedido();
+
+    // ASSERT
+    expect(segundo).not.toBe(primero);
   });
 
   test('CA3: un pedido hecho después de recargar la página no repite un número anterior', async ({ page }) => {
-    test.fixme(true, 'Pendiente de automatizar');
-    // Nivel 3 · CAZABUGS.
-    // Igual que la anterior, pero entre las dos compras recarguen la página con  await page.reload().
-    // Predicción antes de ejecutar: ¿pasará o fallará? Anótenla y compárenla con el resultado.
+    test.fail(true, 'PENDIENTE-JIRA · al recargar, el número de pedido vuelve a empezar (#1001 repetido)');
+    const tienda = new TiendaPage(page);
+
+    // ARRANGE: primera compra
+    await tienda.abrir();
+    await tienda.comprar('Esfero azul');
+    const primero = await tienda.numeroDePedido();
+
+    // ACT: recargar y comprar otra vez
+    await page.reload();
+    await tienda.comprar('Esfero azul');
+    const segundo = await tienda.numeroDePedido();
+
+    // ASSERT
+    expect(segundo).not.toBe(primero);
   });
 });
 

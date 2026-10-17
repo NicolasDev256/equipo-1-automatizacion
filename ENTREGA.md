@@ -17,8 +17,11 @@
 | US-09 · CA3 | Sí (por datos) | Muchas variantes del mismo caso: perfecto para una tabla de datos. Encontró un bug con minúsculas. |
 | US-10 · CA1 y CA2 | Sí | Se corren en cada cambio del carrito. CA2 encontró un bug. |
 | US-11 · CA2 y US-12 · CA2 | Sí | Riesgo más alto (cálculo de dinero). El oráculo se calcula en la prueba a partir del requisito. |
-| US-17 · CA1 y US-19 · CA1 | Sí | Camino feliz de la compra: se repite en cada versión. |
-| US-15 · CA1-CA4 (correos) | Más adelante | Buena para datos, pero no alcanzó el tiempo. |
+| US-13 · CA3 | Sí | Cobrar un pedido de $ 0 es un riesgo alto. Basta comprobar que un botón está deshabilitado. Encontró un bug. |
+| US-14 · CA1 y CA2 | Sí | Validaciones del formulario: se repiten mucho y los mensajes son exactos. |
+| US-15 · CA1-CA4 (correos) | Sí (por datos) | 12 correos: a mano es lento y repetitivo, en una tabla es perfecto. Encontró un bug en 4 filas. |
+| US-16 · CA1 | Sí | Privacidad: los datos de una persona no deben verse en la compra siguiente. Encontró un bug. |
+| US-17 · CA1, CA2 y CA3 · US-19 · CA1 | Sí | Camino feliz de la compra: se repite en cada versión. CA3 encontró un bug. |
 | US-20 (accesibilidad) | No (solo parcial) | Una herramienta automática no ve todo: hace falta revisarlo con una persona. |
 
 ## 2. Bugs que nuestra suite detecta
@@ -35,8 +38,12 @@ Las claves de Jira están pendientes (hay que confirmar con el docente qué proy
 | 03-descuentos-iva › US-11 CA2: IVA sobre el valor descontado | _pendiente_ | Sí | Expected "$ 11.115" · Received "$ 12.350" (19 % de 65.000 sin descontar) |
 | 03-descuentos-iva › US-12 CA2: total con descuento | mismo bug de US-11 | Sí | Expected "$ 69.615" · Received "$ 70.850" |
 | heredados › H2 | mismo bug de US-11 | Sí | Expected "$ 19.760" · Received "$ 24.700" |
+| 04-checkout › US-13 CA3: con total cero no se puede ir a pagar | _pendiente_ | Sí | Expected: disabled · Received: enabled (mismo "−" de US-06, pero es otro bug: no se valida el total) |
+| 04-checkout › US-15 CA1-CA3: correos válidos | _pendiente_ (1 bug, 4 filas) | Sí, solo esas 4 filas | Rechaza ana.gomez@, ana-gomez@, ana+tienda@ y @universidad.edu.co con "El correo no tiene un formato válido.". ana_gomez@ sí pasa |
+| 05-confirmacion › US-16 CA1: el formulario aparece vacío | _pendiente_ | Sí | Expected "" · Received "Ana Gómez" |
+| 05-confirmacion › US-17 CA3: número de pedido tras recargar | _pendiente_ | Sí | Los dos pedidos salen con #1001: al recargar, el contador vuelve a empezar |
 
-Todas fallan siempre igual: cada una se corrió 5 veces (`--repeat-each=5`, 30 de 30 fallos idénticos). US-11, US-12 y H2 son **un solo bug** (el IVA se calcula antes de restar el descuento) visto desde tres pruebas.
+Todas fallan siempre igual: las del carrito y descuentos se corrieron 5 veces (30 de 30 fallos idénticos) y las de checkout y confirmación 3 veces (60 de 60 con el resultado esperado). US-11, US-12 y H2 son **un solo bug** (el IVA se calcula antes de restar el descuento) visto desde tres pruebas.
 
 ## 3. Pruebas heredadas: nuestro diagnóstico
 
@@ -48,8 +55,8 @@ Todas fallan siempre igual: cada una se corrió 5 veces (`--repeat-each=5`, 30 d
 
 ## 4. Medidas
 
-- Casos de prueba de nuestro plan en Jira: **\_\_** · automatizados en este laboratorio: **16** (+3 heredadas) (**\_\_ %**)
-- Tiempo que nos tomó escribir las pruebas automatizadas: **\_\_ min** · tiempo de ejecutar toda la suite: **≈ 27 s** (31 pruebas, en local)
+- Casos de prueba de nuestro plan en Jira: **\_\_** · automatizados en este laboratorio: **33** (+3 heredadas) (**\_\_ %**)
+- Tiempo que nos tomó escribir las pruebas automatizadas: **\_\_ min** · tiempo de ejecutar toda la suite: **≈ 43 s** (41 pruebas, en local)
 - Tiempo estimado de ejecutar **a mano** esos mismos casos: **\_\_ min**
 - Con esos números, ¿en cuántas ejecuciones se paga la automatización? (inversión ÷ ahorro por ejecución): **\_\_**
 
